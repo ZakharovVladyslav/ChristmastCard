@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
                 to: email,
                 subject: "Your friend sent you a mail",
                 text: "Follow the link to receive your Christmas card!",
-                html: `<a>http://localhost:3000/card?message=${messageBase64}</a>`,
+                html: `<a>https://christmast-card.vercel.app//card?message=${messageBase64}</a>`,
             });
 
             console.log("Message sent: %s", info.messageId);
