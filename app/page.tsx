@@ -1,95 +1,92 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+
+import styles from "./page.module.scss";
+import { ChangeEvent, useEffect, useState } from "react";
+import { MouseEvent } from "react";
+import Button from "@/сomponents/Button";
+import Input from "@/сomponents/Fields/Input";
+import Textarea from "@/сomponents/Fields/Textarea";
+import validateEmail from "@/utils/validators/email_validator";
+import { validateText } from "@/utils/validators";
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    const [email, setEmail] = useState<string>("");
+    const [emailError, setEmailError] = useState<string | null>(null);
+    const [message, setMessage] = useState<string>("");
+    const [messageError, setMessageError] = useState<string | null>(null);
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+    const sendEmail = async (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+        const emailValidated = validateEmailOnSubmit();
+        const textValidated = validateTextOnSubmit();
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+        if (emailValidated && textValidated) {
+            fetch("/api/email", {
+                method: "POST",
+                body: JSON.stringify({ email, message }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
+            setEmail("");
+            setMessage("");
+        }
+    };
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    const validateEmailOnSubmit = (): boolean => {
+        const emailValidation: Validate = validateEmail({ email });
+
+        setEmailError(emailValidation.errorMsg);
+
+        return emailValidation.isValidated;
+    };
+
+    const validateTextOnSubmit = (): boolean => {
+        const textValidation: Validate = validateText({
+            text: message,
+            maxLength: 150,
+        });
+
+        setMessageError(textValidation.errorMsg);
+
+        return textValidation.isValidated;
+    };
+
+    return (
+        <main className={styles.main}>
+            <h1 className={styles.title}>
+                Christmas congratulations
+                <span>Send to your friends!</span>
+            </h1>
+
+            <form className={styles.form}>
+                <Input
+                    type="email"
+                    name="email"
+                    value={email}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                        setEmail(event.target.value)
+                    }
+                    placeholder="Enter an email"
+                    label="Email"
+                    error={emailError}
+                />
+
+                <Textarea
+                    value={message}
+                    onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
+                        setMessage(event.target.value)
+                    }
+                    placholder="Enter a message"
+                    label="Message"
+                    error={messageError}
+                    maxLength={150}
+                />
+
+                <Button onClick={sendEmail}>Send</Button>
+            </form>
+        </main>
+    );
 }
