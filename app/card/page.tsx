@@ -39,9 +39,7 @@ export default function CardPage() {
 
             <div className={styles.table}>
                 <div className={styles.content}>
-                    <p className={styles.message}>
-                        Happy holidays! - {message}
-                    </p>
+                    <p className={styles.message}>{message}</p>
 
                     {didUserLikedCard ? (
                         <div className={styles.cardButtonsSection}>
