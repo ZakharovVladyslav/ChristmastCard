@@ -13,27 +13,37 @@ export default function Home() {
     const [email, setEmail] = useState<string>("");
     const [emailError, setEmailError] = useState<string | null>(null);
     const [message, setMessage] = useState<string>("");
+    const [messageBase64, setMessageBase64] = useState<string>("");
     const [messageError, setMessageError] = useState<string | null>(null);
+    const [href, setHref] = useState<string>("");
 
-    const sendEmail = async (event: MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
+    useEffect(() => {
+        const messageBase64 = Buffer.from(message).toString("base64");
 
-        const emailValidated = validateEmailOnSubmit();
-        const textValidated = validateTextOnSubmit();
+        setHref(
+            `mailto:${email}?subject="Marry christmas!"&body="https://christmast-card.vercel.app//card?message=${messageBase64}"`
+        );
+    }, [message]);
 
-        if (emailValidated && textValidated) {
-            fetch("/api/email", {
-                method: "POST",
-                body: JSON.stringify({ email, message }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
+    // const sendEmail = async (event: MouseEvent<HTMLButtonElement>) => {
+    //     event.preventDefault();
 
-            setEmail("");
-            setMessage("");
-        }
-    };
+    //     const emailValidated = validateEmailOnSubmit();
+    //     const textValidated = validateTextOnSubmit();
+
+    //     if (emailValidated && textValidated) {
+    //         fetch("/api/email", {
+    //             method: "POST",
+    //             body: JSON.stringify({ email, message }),
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             },
+    //         });
+
+    //         setEmail("");
+    //         setMessage("");
+    //     }
+    // };
 
     const validateEmailOnSubmit = (): boolean => {
         const emailValidation: Validate = validateEmail({ email });
@@ -85,7 +95,9 @@ export default function Home() {
                     maxLength={150}
                 />
 
-                <Button onClick={sendEmail}>Send</Button>
+                {/* <Button onClick={sendEmail}>Send</Button> */}
+
+                <a href={href}>Send</a>
             </form>
         </main>
     );

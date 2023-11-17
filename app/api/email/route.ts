@@ -21,9 +21,9 @@ export async function POST(req: NextRequest) {
             const info = await transporter.sendMail({
                 from: '"vladislavozakharov@gmail.com"',
                 to: email,
-                subject: "Your friend sent you a mail",
+                subject: "Merry Christmas!",
                 text: "Follow the link to receive your Christmas card!",
-                html: `<a>https://christmast-card.vercel.app//card?message=${messageBase64}</a>`,
+                html: `<a href="https://christmast-card.vercel.app//card?message=${messageBase64}">Click here to receive a card!</a>`,
             });
 
             console.log("Message sent: %s", info.messageId);
