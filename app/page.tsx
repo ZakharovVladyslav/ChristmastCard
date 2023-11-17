@@ -21,7 +21,7 @@ export default function Home() {
         const messageBase64 = Buffer.from(message).toString("base64");
 
         setHref(
-            `mailto:${email}?subject="Marry christmas!"&body="https://christmast-card.vercel.app//card?message=${messageBase64}"`
+            `mailto:${email}?subject="Marry christmas!"&body=https://christmast-card.vercel.app//card?message=${messageBase64}`
         );
     }, [message]);
 
@@ -97,7 +97,9 @@ export default function Home() {
 
                 {/* <Button onClick={sendEmail}>Send</Button> */}
 
-                <a href={href}>Send</a>
+                <a className={styles.link} href={href}>
+                    Send
+                </a>
             </form>
         </main>
     );
