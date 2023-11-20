@@ -18,33 +18,13 @@ export default function Home() {
     const [messageError, setMessageError] = useState<string | null>(null);
     const [href, setHref] = useState<string>("");
 
+    const snowflakeImg = document.createElement("img");
+    snowflakeImg.src = "/snowflake.svg";
+
     useEffect(() => {
-        const messageBase64 = Buffer.from(message).toString("base64");
-
-        setHref(
-            `mailto:${email}?subject="Marry christmas!"&body=https://christmast-card.vercel.app//card?message=${messageBase64}`
-        );
+        setMessageBase64(Buffer.from(message).toString("base64"));
+        console.log(messageBase64);
     }, [message]);
-
-    // const sendEmail = async (event: MouseEvent<HTMLButtonElement>) => {
-    //     event.preventDefault();
-
-    //     const emailValidated = validateEmailOnSubmit();
-    //     const textValidated = validateTextOnSubmit();
-
-    //     if (emailValidated && textValidated) {
-    //         fetch("/api/email", {
-    //             method: "POST",
-    //             body: JSON.stringify({ email, message }),
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //             },
-    //         });
-
-    //         setEmail("");
-    //         setMessage("");
-    //     }
-    // };
 
     const validateEmailOnSubmit = (): boolean => {
         const emailValidation: Validate = validateEmail({ email });
@@ -69,6 +49,10 @@ export default function Home() {
         <main className={styles.main}>
             <Snowfall
                 snowflakeCount={100}
+                wind={[0, 0]}
+                images={[snowflakeImg]}
+                rotationSpeed={[0.5, 0.5]}
+                radius={[1, 20]}
             />
 
             <h1 className={styles.title}>
@@ -100,9 +84,10 @@ export default function Home() {
                     maxLength={150}
                 />
 
-                {/* <Button onClick={sendEmail}>Send</Button> */}
-
-                <a className={styles.link} href={href}>
+                <a
+                    className={styles.link}
+                    href={`mailto:${email}?subject=Marry%20Christmas!&body=http://christmast-card.vercel.app/card/${messageBase64}`}
+                >
                     Send
                 </a>
             </form>

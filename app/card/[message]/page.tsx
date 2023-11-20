@@ -8,18 +8,15 @@ import LinkedButton from "@/сomponents/LinkedButton";
 import { useState } from "react";
 import Snowfall from "react-snowfall";
 
-export default function CardPage() {
-    const params = useSearchParams();
-    const messageBase64 = params.get("message") ?? "";
+export default function CardPage({ params }: { params: { message: string } }) {
+    const messageBase64 = params.message;
     const message = new Buffer(messageBase64, "base64").toString("utf-8");
 
-    const [didUserLikedCard, setDidUserLikedCard] = useState<boolean>(false);
+    const [didUserLikeCard, setDidUserLikeCard] = useState<boolean>(false);
 
     return (
         <main className={styles.main}>
-            <Snowfall
-                snowflakeCount={100}
-            />
+            <Snowfall snowflakeCount={100} />
 
             <div className={styles.globeImageWrapper}>
                 <Image
@@ -44,9 +41,11 @@ export default function CardPage() {
 
             <div className={styles.table}>
                 <div className={styles.content}>
-                    <p className={styles.message}>{message}</p>
+                    <p className={styles.message}>
+                        {message.substring(0, message.length - 1)}
+                    </p>
 
-                    {didUserLikedCard ? (
+                    {didUserLikeCard ? (
                         <div className={styles.cardButtonsSection}>
                             <h3 className={styles.cardRateTitle}>
                                 You can send a card to your friend
@@ -56,7 +55,7 @@ export default function CardPage() {
                                 <Button
                                     size="small"
                                     type="destructive"
-                                    onClick={() => setDidUserLikedCard(false)}
+                                    onClick={() => setDidUserLikeCard(false)}
                                 >
                                     Back
                                 </Button>
@@ -86,7 +85,7 @@ export default function CardPage() {
                                 <Button
                                     size="small"
                                     type="constructive"
-                                    onClick={() => setDidUserLikedCard(true)}
+                                    onClick={() => setDidUserLikeCard(true)}
                                 >
                                     Yes
                                 </Button>
