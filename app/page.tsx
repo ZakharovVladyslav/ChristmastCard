@@ -9,6 +9,7 @@ import Textarea from "@/сomponents/Fields/Textarea";
 import validateEmail from "@/utils/validators/email_validator";
 import { validateText } from "@/utils/validators";
 import Snowfall from "react-snowfall";
+import Image from "next/image";
 
 export default function Home() {
     const [email, setEmail] = useState<string>("");
@@ -16,15 +17,18 @@ export default function Home() {
     const [message, setMessage] = useState<string>("");
     const [messageBase64, setMessageBase64] = useState<string>("");
     const [messageError, setMessageError] = useState<string | null>(null);
-    const [href, setHref] = useState<string>("");
-
-    const snowflakeImg = document.createElement("img");
-    snowflakeImg.src = "/snowflake.svg";
+    const [images, setImages] = useState<HTMLImageElement[]>([]);
 
     useEffect(() => {
         setMessageBase64(Buffer.from(message).toString("base64"));
-        console.log(messageBase64);
     }, [message]);
+
+    useEffect(() => {
+        const snowflake = document.createElement("img");
+        snowflake.src = "/snowflake.svg";
+
+        setImages([snowflake]);
+    }, []);
 
     const validateEmailOnSubmit = (): boolean => {
         const emailValidation: Validate = validateEmail({ email });
@@ -50,7 +54,7 @@ export default function Home() {
             <Snowfall
                 snowflakeCount={100}
                 wind={[0, 0]}
-                images={[snowflakeImg]}
+                images={images}
                 rotationSpeed={[0.5, 0.5]}
                 radius={[1, 20]}
             />
