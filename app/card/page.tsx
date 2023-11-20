@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import Button from "@/сomponents/Button";
 import LinkedButton from "@/сomponents/LinkedButton";
 import { useState } from "react";
+import Snowfall from "react-snowfall";
 
 export default function CardPage() {
     const params = useSearchParams();
@@ -16,6 +17,10 @@ export default function CardPage() {
 
     return (
         <main className={styles.main}>
+            <Snowfall
+                snowflakeCount={100}
+            />
+
             <div className={styles.globeImageWrapper}>
                 <Image
                     className={styles.card}

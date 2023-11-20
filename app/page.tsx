@@ -8,6 +8,7 @@ import Input from "@/сomponents/Fields/Input";
 import Textarea from "@/сomponents/Fields/Textarea";
 import validateEmail from "@/utils/validators/email_validator";
 import { validateText } from "@/utils/validators";
+import Snowfall from "react-snowfall";
 
 export default function Home() {
     const [email, setEmail] = useState<string>("");
@@ -66,6 +67,10 @@ export default function Home() {
 
     return (
         <main className={styles.main}>
+            <Snowfall
+                snowflakeCount={100}
+            />
+
             <h1 className={styles.title}>
                 Christmas congratulations
                 <span>Send to your friends!</span>

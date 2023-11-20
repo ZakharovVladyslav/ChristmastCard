@@ -1,4 +1,4 @@
-import { MouseEventHandler } from "react";
+import { MouseEvent, MouseEventHandler } from "react";
 import styles from "./Button.module.scss";
 import cn from "classnames";
 
@@ -7,7 +7,7 @@ type ButtonType = "default" | "constructive" | "destructive";
 
 interface ButtonProps {
     children: React.ReactNode;
-    onClick: MouseEventHandler<HTMLButtonElement>;
+    onClick: VoidFunction;
     size?: ButtonSize;
     type?: ButtonType;
 }
@@ -18,6 +18,13 @@ export default function Button({
     size = "default",
     type = "default",
 }: ButtonProps): JSX.Element {
+    const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+
+        if (onClick)
+            onClick()
+    }
+
     return (
         <button
             className={cn(styles.button, {
@@ -25,7 +32,7 @@ export default function Button({
                 [styles.constructive]: type === "constructive",
                 [styles.destructive]: type === "destructive",
             })}
-            onClick={onClick}
+            onClick={handleClick}
         >
             {children}
         </button>
